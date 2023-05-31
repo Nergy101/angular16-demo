@@ -1,0 +1,9 @@
+<div>{{ fullName() }} <button (click)="setName('John')">Click</button></div>
+<div>
+  Counter: {{ count() }} <button (click)="increment()">Increment</button>
+</div>
+<div>Double that is: {{ doubleCount() }}!</div>
+<div>
+  <input [ngModel]="name()" (ngModelChange)="onNameChange($event)" />
+  {{ name() }}
+</div>
