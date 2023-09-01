@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './signals-component.component.html',
   styleUrls: ['./signals-component.component.scss'],
 })
-export class SignalComponent implements OnDestroy {
+export class SignalComponent { // old way: implements OnDestroy
   count = signal(0);
   doubleCount = computed(() => this.count() * 2);
 
@@ -24,39 +24,47 @@ export class SignalComponent implements OnDestroy {
   fullName = computed(() => `${this.firstName()} ${this.lastName()}`);
   nameChangeEffect = effect(() => console.log('Name changed:', this.name()));
 
-  destroy$ = new Subject<void>();
+  // old OnDestroy way
+  // destroy$ = new Subject<void>();
 
   constructor() {
-    // New
+    // Old reactivity with subscribe()
+    this.doubleCount$
+      .pipe(takeUntilDestroyed())         // new way: `takeUntilDestroyed()`, a magic function that will unsubscribe for you
+      // .pipe(takeUntil(this.destroy$))  // old way
+      .subscribe((value) => console.log('(old) Double is now:', value));
+
+    // New reactivity with effects
     effect(() => console.log('(new) Double is now:', this.doubleCount()));
 
-    // Old
-    this.doubleCount$
-      .pipe(takeUntilDestroyed()) // new: takeUntilDestroyed
-      // .pipe(takeUntil(this.destroy$)) // old way
-      .subscribe((value) => console.log('(old) Double is now:', value));
 
     // cleanup
     effect((onCleanup) => {
-      console.log('Name changed to', this.name);
-      onCleanup(() => console.log('cleaned up effect!'));
+      console.log('Name changed to', this.name());
+      onCleanup(() => {
+        // used for cleaning up resources like timers, or other managed resources, etc.
+        console.log('cleaned up effect!');
+      });
     });
   }
 
-  // old way
-  ngOnDestroy(): void {
-    this.destroy$.next();
-  }
+  // old OnDestroy way
+  // ngOnDestroy(): void {
+  //   this.destroy$.next();
+  // }
 
+  // set new signal value
   setName(newName: string): void {
     this.firstName.set(newName);
   }
 
+  // update signal value (with current value)
   increment(): void {
     this.count.update((current) => current + 1);
   }
 
-  onNameChange(newVal: string) {
-    this.name.set(newVal);
+  // set new signal value
+  onNameChange(newName: string) {
+    this.name.set(newName);
   }
 }
