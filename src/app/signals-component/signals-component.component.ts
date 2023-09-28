@@ -1,7 +1,7 @@
 import { Component, OnDestroy, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import { Subject, debounce, debounceTime, interval, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -18,16 +18,25 @@ export class SignalComponent { // old way: implements OnDestroy
   doubleCount$ = toObservable(this.doubleCount);
 
   name = signal('Christian');
+  name$ = toObservable(this.name);
 
   firstName = signal('Jane');
   lastName = signal('Doe');
   fullName = computed(() => `${this.firstName()} ${this.lastName()}`);
+
   nameChangeEffect = effect(() => console.log('Name changed:', this.name()));
 
   // old OnDestroy way
   // destroy$ = new Subject<void>();
 
   constructor() {
+    this.name$
+      .pipe(
+        debounceTime(1000),
+        tap(val => console.log('Debounced name changed:', val)),
+        takeUntilDestroyed()
+      ).subscribe();
+
     // Old reactivity with subscribe()
     this.doubleCount$
       .pipe(takeUntilDestroyed())         // new way: `takeUntilDestroyed()`, a magic function that will unsubscribe for you
@@ -40,10 +49,10 @@ export class SignalComponent { // old way: implements OnDestroy
 
     // cleanup
     effect((onCleanup) => {
-      console.log('Name changed to', this.name());
+      // console.log('Name changed to', this.name());
       onCleanup(() => {
         // used for cleaning up resources like timers, or other managed resources, etc.
-        console.log('cleaned up effect!');
+        // console.log('cleaned up effect!');
       });
     });
   }
