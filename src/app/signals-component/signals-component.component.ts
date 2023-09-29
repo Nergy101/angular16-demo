@@ -1,7 +1,7 @@
-import { Component, OnDestroy, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { Subject, debounce, debounceTime, interval, tap } from 'rxjs';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime, interval, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -11,13 +11,17 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './signals-component.component.html',
   styleUrls: ['./signals-component.component.scss'],
 })
-export class SignalComponent { // old way: implements OnDestroy
+export class SignalComponent { //! old way: implements OnDestroy
   count = signal(0);
+  //* We can make computed signals from other signals, which update whenever the dependencies (in this case: `this.count`) change
   doubleCount = computed(() => this.count() * 2);
 
+  //* We can make observables from signals, to use rxjs operators on them
   doubleCount$ = toObservable(this.doubleCount);
 
   name = signal('Christian');
+
+  //* We can make observables from signals, to use rxjs operators on them
   name$ = toObservable(this.name);
 
   firstName = signal('Jane');
@@ -26,10 +30,12 @@ export class SignalComponent { // old way: implements OnDestroy
 
   nameChangeEffect = effect(() => console.log('Name changed:', this.name()));
 
-  // old OnDestroy way
-  // destroy$ = new Subject<void>();
+  //! old OnDestroy way
+  //! destroy$ = new Subject<void>();
 
   constructor() {
+
+    //* We can make observables from signals, to use rxjs operators on them
     this.name$
       .pipe(
         debounceTime(1000),
@@ -37,30 +43,35 @@ export class SignalComponent { // old way: implements OnDestroy
         takeUntilDestroyed()
       ).subscribe();
 
-    // Old reactivity with subscribe()
+    //? Old reactivity with subscribe on observables
     this.doubleCount$
-      .pipe(takeUntilDestroyed())         // new way: `takeUntilDestroyed()`, a magic function that will unsubscribe for you
-      // .pipe(takeUntil(this.destroy$))  // old way
+      .pipe(takeUntilDestroyed())         //* new way: `takeUntilDestroyed()`, a magic function that will unsubscribe for you
+      //! .pipe(takeUntil(this.destroy$))  // old way
       .subscribe((value) => console.log('(old) Double is now:', value));
 
-    // New reactivity with effects
+    //? New reactivity with effects on signals
     effect(() => console.log('(new) Double is now:', this.doubleCount()));
 
-
-    // cleanup
+    // cleanup of effects
     effect((onCleanup) => {
-      // console.log('Name changed to', this.name());
       onCleanup(() => {
-        // used for cleaning up resources like timers, or other managed resources, etc.
-        // console.log('cleaned up effect!');
+        //* used for cleaning up resources like timers, or other managed resources, etc.
+        //* console.log('cleaned up effect!');
       });
+    });
+
+    //* Showcase of a RxJs observable to a signal with: `toSignal`
+    const seconds$ = interval(10000);
+    const seconds = toSignal(seconds$, { initialValue: 0 });
+    effect(() => {
+      console.log(`${seconds() * 10} seconds have passed`);
     });
   }
 
-  // old OnDestroy way
-  // ngOnDestroy(): void {
-  //   this.destroy$.next();
-  // }
+  //! old OnDestroy way
+  //! ngOnDestroy(): void {
+  //!   this.destroy$.next();
+  //! }
 
   // set new signal value
   setName(newName: string): void {
