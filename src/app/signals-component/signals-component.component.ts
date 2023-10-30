@@ -34,7 +34,6 @@ export class SignalComponent { //! old way: implements OnDestroy
   //! destroy$ = new Subject<void>();
 
   constructor() {
-
     //* We can make observables from signals, to use rxjs operators on them
     this.name$
       .pipe(
@@ -45,14 +44,14 @@ export class SignalComponent { //! old way: implements OnDestroy
 
     //? Old reactivity with subscribe on observables
     this.doubleCount$
-      .pipe(takeUntilDestroyed())         //* new way: `takeUntilDestroyed()`, a magic function that will unsubscribe for you
+      .pipe(takeUntilDestroyed())         //* new way
       //! .pipe(takeUntil(this.destroy$))  // old way
       .subscribe((value) => console.log('(old) Double is now:', value));
 
     //? New reactivity with effects on signals
     effect(() => console.log('(new) Double is now:', this.doubleCount()));
 
-    // cleanup of effects
+    //* cleanup of effects
     effect((onCleanup) => {
       onCleanup(() => {
         //* used for cleaning up resources like timers, or other managed resources, etc.
