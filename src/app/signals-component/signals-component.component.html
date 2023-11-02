@@ -1,9 +1,29 @@
-<div>{{ fullName() }} <button (click)="setName('John')">Click</button></div>
-<div>
-  Counter: {{ count() }} <button (click)="increment()">Increment</button>
-</div>
-<div>Double that is: {{ doubleCount() }}!</div>
-<div>
-  <input [ngModel]="name()" (ngModelChange)="onNameChange($event)" />
-  {{ name() }}
-</div>
+<section class="center">{{ fullName() }}
+  <button (click)="setName('John')" data-tooltip="Uses signal.set" data-placement="right">Change</button>
+</section>
+
+<section  class="center">
+  Counter: {{ count() }}
+  <button (click)="increment()" data-tooltip="Uses signal.update" data-placement="right">Increment</button>
+  <div>Double that is: {{ doubleCount() }}</div>
+</section>
+
+
+<section data-tooltip="Uses signal.set" data-placement="bottom">
+  <label for="firstname">
+    First name
+    <input [ngModel]="name()" (ngModelChange)="onNameChange($event)" type="text" id="firstname" name="firstname"
+      placeholder="First name" />
+  </label>
+
+  <p>{{ name() }}</p>
+</section>
+
+<section data-tooltip="Uses signal.mutate" data-placement="bottom">
+  <label for="companyName">
+
+    <input [ngModel]="company().name" (ngModelChange)="onCompanyNameChange($event)" type="text" id="companyName"
+      name="companyName" placeholder="Company name" />
+  </label>
+  <kbd>{{ company() | json }}</kbd>
+</section>

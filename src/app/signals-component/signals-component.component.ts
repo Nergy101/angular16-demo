@@ -21,6 +21,11 @@ export class SignalComponent { //! old way: implements OnDestroy
 
   name = signal('Christian');
 
+  company = signal({
+    name: 'Cloud Republic',
+    shortName: 'CR'
+  });
+
   //* We can make observables from signals, to use rxjs operators on them
   name$ = toObservable(this.name);
 
@@ -29,6 +34,7 @@ export class SignalComponent { //! old way: implements OnDestroy
   fullName = computed(() => `${this.firstName()} ${this.lastName()}`);
 
   nameChangeEffect = effect(() => console.log('Name changed:', this.name()));
+  companyChangeEffect = effect(() => console.log(this.company()));
 
   //! old OnDestroy way
   //! destroy$ = new Subject<void>();
@@ -63,7 +69,7 @@ export class SignalComponent { //! old way: implements OnDestroy
     const seconds$ = interval(10000);
     const seconds = toSignal(seconds$, { initialValue: 0 });
     effect(() => {
-      console.log(`${seconds() * 10} seconds have passed`);
+      console.info(`RxJs observable: ${seconds() * 10} seconds have passed`);
     });
   }
 
@@ -72,18 +78,23 @@ export class SignalComponent { //! old way: implements OnDestroy
   //!   this.destroy$.next();
   //! }
 
-  // set new signal value
+  //* set new signal value
   setName(newName: string): void {
     this.firstName.set(newName);
   }
 
-  // update signal value (with current value)
+  //* update signal value (using current value)
   increment(): void {
     this.count.update((current) => current + 1);
   }
 
-  // set new signal value
+  //* set new signal value
   onNameChange(newName: string) {
     this.name.set(newName);
+  }
+
+  //* mutate signal value in-place (for objects and arrays)
+  onCompanyNameChange(newName: string) {
+    this.company.mutate(c => c.name = newName);
   }
 }
