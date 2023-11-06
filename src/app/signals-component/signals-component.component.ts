@@ -12,12 +12,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./signals-component.component.scss'],
 })
 export class SignalComponent { //! old way: implements OnDestroy
+  //* create a property that's a signal
   count = signal(0);
-  //* We can make computed signals from other signals, which update whenever the dependencies (in this case: `this.count`) change
-  doubleCount = computed(() => this.count() * 2);
-
-  //* We can make observables from signals, to use rxjs operators on them
-  doubleCount$ = toObservable(this.doubleCount);
 
   name = signal('Christian');
 
@@ -25,6 +21,23 @@ export class SignalComponent { //! old way: implements OnDestroy
     name: 'Cloud Republic',
     shortName: 'CR'
   });
+
+  todos = signal([
+    {
+      id: 1,
+      title: "Very important"
+    },
+    {
+      id: 2,
+      title: "Medium important"
+    }
+  ])
+
+  //* We can make computed signals from other signals, which update whenever the dependencies (in this case: `this.count`) change
+  doubleCount = computed(() => this.count() * 2);
+
+  //* We can make observables from signals, to use rxjs operators on them
+  doubleCount$ = toObservable(this.doubleCount);
 
   //* We can make observables from signals, to use rxjs operators on them
   name$ = toObservable(this.name);
@@ -96,5 +109,11 @@ export class SignalComponent { //! old way: implements OnDestroy
   //* mutate signal value in-place (for objects and arrays)
   onCompanyNameChange(newName: string) {
     this.company.mutate(c => c.name = newName);
+  }
+
+  delete(todoId: number) {
+    this.todos.update(_todos => {
+      return _todos.filter(x => x.id != todoId);
+    })
   }
 }

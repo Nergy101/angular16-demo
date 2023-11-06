@@ -2,7 +2,7 @@
   <button (click)="setName('John')" data-tooltip="Uses signal.set" data-placement="right">Change</button>
 </section>
 
-<section  class="center">
+<section class="center">
   Counter: {{ count() }}
   <button (click)="increment()" data-tooltip="Uses signal.update" data-placement="right">Increment</button>
   <div>Double that is: {{ doubleCount() }}</div>
@@ -25,5 +25,18 @@
     <input [ngModel]="company().name" (ngModelChange)="onCompanyNameChange($event)" type="text" id="companyName"
       name="companyName" placeholder="Company name" />
   </label>
-  <kbd>{{ company() | json }}</kbd>
+  <pre>{{ company() | json }}</pre>
+</section>
+
+
+<section data-tooltip="Uses signal.update" data-placement="bottom">
+  <ol>
+    <li *ngFor="let todo of todos()">
+      <span>
+        {{todo.title}}
+      </span>
+      <button (click)="delete(todo.id)">🗑️</button>
+    </li>
+  </ol>
+  <pre>{{ todos() | json }}</pre>
 </section>
