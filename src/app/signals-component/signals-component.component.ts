@@ -4,13 +4,15 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
 import { Observable, debounceTime, interval, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
+//* standalone components can directly import modules, components, etc.
+//* Angular checks OnPush components when the async pipes or signals provide a new value
 @Component({
   selector: 'signal-component',
-  standalone: true, //* standalone components can directly import modules, components, etc.
-  changeDetection: ChangeDetectionStrategy.OnPush, //* Angular checks OnPush components when the async pipes or signals provide a new value
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './signals-component.component.html',
   styleUrls: ['./signals-component.component.scss'],
+  imports: [CommonModule, FormsModule]
 })
 export class SignalComponent { //! old way: implements OnDestroy
   //* create a property that's a signal
