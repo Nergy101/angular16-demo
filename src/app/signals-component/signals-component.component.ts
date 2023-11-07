@@ -1,12 +1,13 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime, interval, tap } from 'rxjs';
+import { Observable, debounceTime, interval, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'signal-component',
-  standalone: true,
+  standalone: true, //* standalone components can directly import modules, components, etc.
+  changeDetection: ChangeDetectionStrategy.OnPush, //* Angular checks OnPush components when the async pipes or signals provide a new value
   imports: [CommonModule, FormsModule],
   templateUrl: './signals-component.component.html',
   styleUrls: ['./signals-component.component.scss'],
@@ -101,17 +102,12 @@ export class SignalComponent { //! old way: implements OnDestroy
     this.count.update((current) => current + 1);
   }
 
-  //* set new signal value
-  onNameChange(newName: string) {
-    this.name.set(newName);
-  }
-
   //* mutate signal value in-place (for objects and arrays)
   onCompanyNameChange(newName: string) {
     this.company.mutate(c => c.name = newName);
   }
 
-  delete(todoId: number) {
+  deleteTodo(todoId: number) {
     this.todos.update(_todos => {
       return _todos.filter(x => x.id != todoId);
     })

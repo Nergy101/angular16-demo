@@ -12,7 +12,8 @@
 <section data-tooltip="Uses signal.set" data-placement="bottom">
   <label for="firstname">
     First name
-    <input [ngModel]="name()" (ngModelChange)="onNameChange($event)" type="text" id="firstname" name="firstname"
+    <!-- There's no 2-way binding yet for signals -->
+    <input [ngModel]="name()" (ngModelChange)="name.set($event)" type="text" id="firstname" name="firstname"
       placeholder="First name" />
   </label>
 
@@ -35,7 +36,7 @@
       <span>
         {{todo.title}}
       </span>
-      <button (click)="delete(todo.id)">🗑️</button>
+      <button (click)="deleteTodo(todo.id)">🗑️</button>
     </li>
   </ol>
   <pre>{{ todos() | json }}</pre>
