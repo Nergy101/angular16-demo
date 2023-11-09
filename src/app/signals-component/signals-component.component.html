@@ -1,9 +1,8 @@
-<section class="center">
-  <p>
-    firstname: {{ firstName() }} <br />
-    lastname: {{ lastName() }}<br />
-    fullname: {{ fullName() }}
-  </p>
+<h3>Signal Showcase</h3>
+<section class="center text-center">
+  first name: {{ firstName() }} <br />
+  last name: {{ lastName() }} <br />
+  full name: {{ fullName() }}
   <button (click)="setName('John')" data-tooltip="Uses signal.set" data-placement="right">Change</button>
 </section>
 
@@ -12,7 +11,6 @@
   <button (click)="increment()" data-tooltip="Uses signal.update" data-placement="right">Increment</button>
   <div>Double that is: {{ doubleCount() }}</div>
 </section>
-
 
 <section data-tooltip="Uses signal.set" data-placement="bottom">
   <label for="firstname">
@@ -27,7 +25,6 @@
 
 <section data-tooltip="Uses signal.mutate" data-placement="bottom">
   <label for="companyName">
-
     <input [ngModel]="company().name" (ngModelChange)="onCompanyNameChange($event)" type="text" id="companyName"
       name="companyName" placeholder="Company name" />
   </label>
