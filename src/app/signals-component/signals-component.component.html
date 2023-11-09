@@ -1,11 +1,16 @@
-<section class="center">{{ fullName() }}
+<section class="center">
+  <p>
+    firstname: {{ firstName() }} <br />
+    lastname: {{ lastName() }}<br />
+    fullname: {{ fullName() }}
+  </p>
   <button (click)="setName('John')" data-tooltip="Uses signal.set" data-placement="right">Change</button>
 </section>
 
 <section class="center">
   Counter: {{ count() }}
   <button (click)="increment()" data-tooltip="Uses signal.update" data-placement="right">Increment</button>
-  <div>Double that is: {{ doubleCount()  }}</div>
+  <div>Double that is: {{ doubleCount() }}</div>
 </section>
 
 

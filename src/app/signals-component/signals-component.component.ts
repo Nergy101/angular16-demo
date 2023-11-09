@@ -32,7 +32,7 @@ export class SignalComponent { //! old way: implements OnDestroy
     },
     {
       id: 2,
-      title: "Medium important"
+      title: "Not important"
     }
   ])
 
