@@ -23,7 +23,7 @@
   <p>{{ name() }}</p>
 </section>
 
-<section data-tooltip="Uses signal.mutate" data-placement="bottom">
+<section data-tooltip="Uses signal.update" data-placement="bottom">
   <label for="companyName">
     <input [ngModel]="company().name" (ngModelChange)="onCompanyNameChange($event)" type="text" id="companyName"
       name="companyName" placeholder="Company name" />
@@ -34,6 +34,7 @@
 
 <section data-tooltip="Uses signal.update" data-placement="bottom">
   <ol>
+    <!-- Angular 16 used *ngFor -->
     <li *ngFor="let todo of todos()">
       <span>
         {{todo.title}}

@@ -1,0 +1,58 @@
+<p>defered-component works!</p>
+
+<section class="center text-center">
+    @defer (on interaction; prefetch on idle) {
+    <div>I was prefetched after the browser went idle!</div>
+    } @placeholder (minimum 3000ms) {
+    <div>I have prefetched the defered view, and will show it on interaction after at least 3 seconds!</div>
+    }
+</section>
+<section class="center text-center">
+
+    <div>
+        <span>Integer is </span>
+        @if (integer >= 3)
+        { <span>3 or more</span> }
+        @else {
+        <div>less than 3</div>
+        }
+    </div>
+
+    @defer (when items.length > 0){
+    <div>Items loaded!</div>
+    }
+
+    @defer (when items.length > 0){
+    Items: <br />
+    @for (item of items; track $index) {
+    @if ($index % 2 == 0) {
+    <div>x {{item}}</div>
+    } @else {
+    <div>o {{item}}</div>
+    }
+    } @empty {
+    <div>No items to show!</div>
+    }
+    } @placeholder {
+    <div>Waiting for items...</div>
+    }
+</section>
+<section class="center text-center">
+    @defer {
+    <div>This took some time to load!</div>
+    } @loading (after 100ms; minimum 1s) {
+    <div>Placeholder after 100ms and minimum of 1s!</div>
+    }
+</section>
+
+<section class="center text-center">
+    @defer (on hover) {
+    <div>The answer is: 42.</div>
+    } @placeholder {
+    <div>
+        When you hover over me, <br />
+        I will tell you the answer to: <br />
+        the Ultimate Question of Life, the Universe, and Everything
+    </div>
+    }
+</section>

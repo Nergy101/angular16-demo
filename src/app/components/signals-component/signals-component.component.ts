@@ -1,6 +1,17 @@
-import { ChangeDetectionStrategy, Component, Input, computed, effect, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  computed,
+  effect,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import { Observable, debounceTime, interval, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
@@ -12,9 +23,10 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './signals-component.component.html',
   styleUrls: ['./signals-component.component.scss'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
 })
-export class SignalComponent { //! old way: implements OnDestroy
+export class SignalComponent {
+  //! old way: implements OnDestroy
   //* create a property that's a signal
   count = signal(0);
 
@@ -22,19 +34,19 @@ export class SignalComponent { //! old way: implements OnDestroy
 
   company = signal({
     name: 'Cloud Republic',
-    shortName: 'CR'
+    shortName: 'CR',
   });
 
   todos = signal([
     {
       id: 1,
-      title: "Very important"
+      title: 'Very important',
     },
     {
       id: 2,
-      title: "Not important"
-    }
-  ])
+      title: 'Not important',
+    },
+  ]);
 
   //* We can make computed signals from other signals, which update whenever the dependencies (in this case: `this.count`) change
   doubleCount = computed(() => this.count() * 2);
@@ -60,13 +72,14 @@ export class SignalComponent { //! old way: implements OnDestroy
     this.name$
       .pipe(
         debounceTime(1000),
-        tap(val => console.log('Debounced name changed:', val)),
+        tap((val) => console.log('Debounced name changed:', val)),
         takeUntilDestroyed()
-      ).subscribe();
+      )
+      .subscribe();
 
     //? Old reactivity with subscribe on observables
     this.doubleCount$
-      .pipe(takeUntilDestroyed())         //* new way
+      .pipe(takeUntilDestroyed()) //* new way
       //! .pipe(takeUntil(this.destroy$))  // old way
       .subscribe((value) => console.log('(old) Double is now:', value));
 
@@ -105,13 +118,13 @@ export class SignalComponent { //! old way: implements OnDestroy
   }
 
   //* mutate signal value in-place (for objects and arrays)
-  onCompanyNameChange(newName: string) {
-    this.company.mutate(c => c.name = newName);
+  onCompanyNameChange(newName: string): void {
+    this.company.update((current) => (current = { ...current, name: newName }));
   }
 
-  deleteTodo(todoId: number) {
-    this.todos.update(_todos => {
-      return _todos.filter(x => x.id != todoId);
-    })
+  deleteTodo(todoId: number): void {
+    this.todos.update((_todos) => {
+      return _todos.filter((x) => x.id != todoId);
+    });
   }
 }

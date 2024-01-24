@@ -1,1 +1,15 @@
-<signal-component></signal-component>
+<section>
+    <signal-component></signal-component>
+</section>
+
+<section class="center">
+    <signal-input-component></signal-input-component>
+</section>
+
+<section>
+    @defer (on viewport) {
+    <app-defer-component></app-defer-component>
+    } @placeholder {
+    <div>This is a placeholder until the component is in viewport!</div>
+    }
+</section>
