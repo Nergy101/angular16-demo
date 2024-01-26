@@ -1,4 +1,4 @@
 <section>
-    <input [(ngModel)]="signalComponent.test().name" type="text">
+    <input [(ngModel)]="signalService.mySignal().name" type="text">
 </section>
-<signal-input-demo-component [test]="signalComponent.test()"></signal-input-demo-component>
+<signal-input-demo-component [myInput]="signalService.mySignal()"></signal-input-demo-component>

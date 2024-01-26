@@ -9,5 +9,5 @@ import { Test } from '../models/test';
   styleUrl: './signals-input-demo-component.component.scss',
 })
 export class SignalsInputDemoComponentComponent {
-  test = input.required<Test>();
+  myInput = input.required<Test>();
 }

@@ -18,5 +18,5 @@ import { SignalService } from 'src/app/services/signal-service.service';
   imports: [FormsModule, SignalsInputDemoComponentComponent],
 })
 export class SignalsInputComponentComponent {
-  public signalComponent = inject(SignalService);
+  public signalService = inject(SignalService);
 }

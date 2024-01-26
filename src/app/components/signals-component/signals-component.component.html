@@ -1,4 +1,16 @@
 <h3>Signal Showcase</h3>
+
+<section data-tooltip="Uses signal.set" data-placement="bottom">
+  <label for="firstname">
+    First name
+    <!-- There's no 2-way binding yet for signals -->
+    <input [ngModel]="name()" (ngModelChange)="name.set($event)" type="text" id="firstname" name="firstname"
+      placeholder="First name" />
+  </label>
+
+  <p>{{ name() }}</p>
+</section>
+
 <section class="center text-center">
   first name: {{ firstName() }} <br />
   last name: {{ lastName() }} <br />
@@ -12,16 +24,6 @@
   <div>Double that is: {{ doubleCount() }}</div>
 </section>
 
-<section data-tooltip="Uses signal.set" data-placement="bottom">
-  <label for="firstname">
-    First name
-    <!-- There's no 2-way binding yet for signals -->
-    <input [ngModel]="name()" (ngModelChange)="name.set($event)" type="text" id="firstname" name="firstname"
-      placeholder="First name" />
-  </label>
-
-  <p>{{ name() }}</p>
-</section>
 
 <section data-tooltip="Uses signal.update" data-placement="bottom">
   <label for="companyName">

@@ -81,10 +81,10 @@ export class SignalComponent {
     this.doubleCount$
       .pipe(takeUntilDestroyed()) //* new way
       //! .pipe(takeUntil(this.destroy$))  // old way
-      .subscribe((value) => console.log('(old) Double is now:', value));
+      .subscribe((value) => console.log('(rxjs) Double is now:', value));
 
     //? New reactivity with effects on signals
-    effect(() => console.log('(new) Double is now:', this.doubleCount()));
+    effect(() => console.log('(signals) Double is now:', this.doubleCount()));
 
     //* cleanup of effects
     effect((onCleanup) => {
@@ -98,7 +98,7 @@ export class SignalComponent {
     const seconds$ = interval(10000);
     const seconds = toSignal(seconds$, { initialValue: 0 });
     effect(() => {
-      console.info(`RxJs observable: ${seconds() * 10} seconds have passed`);
+      console.warn(`RxJs observable: ${seconds() * 10} seconds have passed`);
     });
   }
 

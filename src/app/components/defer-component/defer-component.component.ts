@@ -14,6 +14,6 @@ export class DeferComponentComponent {
   private signalService = inject(SignalService);
 
   changeSignalService(): void {
-    this.signalService.test.set({ name: '@DevTalks', age: 5 });
+    this.signalService.mySignal.set({ name: '@DevTalks', age: 5 });
   }
 }

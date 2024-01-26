@@ -5,11 +5,11 @@ import { Test } from '../components/signals-input-component/models/test';
   providedIn: 'root',
 })
 export class SignalService {
-  test: WritableSignal<Test> = signal({ name: 'Christian', age: 24 });
+  mySignal: WritableSignal<Test> = signal({ name: 'Christian', age: 24 });
 
   constructor() {
     effect(() => {
-      console.table(this.test());
+      console.table(this.mySignal());
     });
   }
 }

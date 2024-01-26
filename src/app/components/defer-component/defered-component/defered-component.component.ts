@@ -1,4 +1,4 @@
-import { Component, OnInit, input } from '@angular/core';
+import { Component, Input, OnInit, input } from '@angular/core';
 import { Test } from '../../signals-input-component/models/test';
 
 @Component({
